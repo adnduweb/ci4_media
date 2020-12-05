@@ -1,0 +1,15 @@
+
+{
+    "name": "adnduweb/ci4_media",
+    "license": "MIT",
+    "description": "An Example of CodeIgniter 4 Media module",
+    "autoload": {
+        "psr-4": {
+            "Adnduweb\\Ci4Media\\" : ""
+        }
+    },
+    "require": {
+        "adnduweb/ci4_core": "*"
+    }
+}
+
