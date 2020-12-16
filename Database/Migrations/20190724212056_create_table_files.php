@@ -1,18 +1,21 @@
-<?php namespace Adnduweb\Ci4Core\Database\Migrations;
+<?php namespace Adnduweb\Ci4Media\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Migration_create_table_files extends Migration
+class Migration_create_table_medias extends Migration
 {
 	public function up()
 	{
-		// files
+		// medias
 		$fields = [
+			'id'         => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'uuid'       => ['type' => 'BINARY', 'constraint' => 16, 'unique' => true],
 			'filename'   => ['type' => 'VARCHAR', 'constraint' => 255],
 			'localname'  => ['type' => 'VARCHAR', 'constraint' => 255],
 			'clientname' => ['type' => 'VARCHAR', 'constraint' => 255],
 			'type'       => ['type' => 'VARCHAR', 'constraint' => 255],
 			'size'       => ['type' => 'INT', 'unsigned' => true],
+			'ext'        => ['type' => 'VARCHAR', 'constraint' => 48],
 			'thumbnail'  => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
 			'created_at' => ['type' => 'DATETIME', 'null' => true],
 			'updated_at' => ['type' => 'DATETIME', 'null' => true],
@@ -25,9 +28,25 @@ class Migration_create_table_files extends Migration
 		$this->forge->addKey('filename');
 		$this->forge->addKey('created_at');
 
-		$this->forge->createTable('files');
+		$this->forge->createTable('medias');
 
-		// files_users
+		// medias Langs
+		$fields = [
+            'id_media_lang' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'media_id'      => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
+            'id_lang'       => ['type' => 'INT', 'constraint' => 11],
+            'titre'         => ['type' => 'VARCHAR', 'constraint' => 255],
+            'legende'       => ['type' => 'VARCHAR', 'constraint' => 255],
+            'description'   => ['type' => 'VARCHAR', 'constraint' => 255]
+        ];
+
+        $this->forge->addField($fields);
+        $this->forge->addKey('id_media_lang', true);
+        $this->forge->addKey('id_lang');
+        $this->forge->addForeignKey('media_id', 'medias', 'id', false, 'CASCADE');
+        $this->forge->createTable('medias_langs', true);
+
+		// medias_users
 		$fields = [
 			'file_id'    => ['type' => 'INT', 'unsigned' => true],
 			'user_id'    => ['type' => 'INT', 'unsigned' => true],
@@ -40,7 +59,7 @@ class Migration_create_table_files extends Migration
 		$this->forge->addUniqueKey(['file_id', 'user_id']);
 		$this->forge->addUniqueKey(['user_id', 'file_id']);
 
-		$this->forge->createTable('files_users');
+		$this->forge->createTable('medias_users');
 
 		// downloads
 		$fields = [
@@ -55,13 +74,14 @@ class Migration_create_table_files extends Migration
 		$this->forge->addKey(['file_id', 'user_id']);
 		$this->forge->addKey(['user_id', 'file_id']);
 
-		$this->forge->createTable('downloads');
+		$this->forge->createTable('medias_downloads');
 	}
 
 	public function down()
 	{
-		$this->forge->dropTable('files');
-		$this->forge->dropTable('files_users');
-		$this->forge->dropTable('downloads');
+		$this->forge->dropTable('medias');
+		$this->forge->dropTable('medias_langs');
+		$this->forge->dropTable('medias_users');
+		$this->forge->dropTable('medias_downloads');
 	}
 }

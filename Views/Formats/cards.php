@@ -1,21 +1,33 @@
 
 	<?php if (empty($files)): ?>
-	<p>No files to display.</p>
+	<p><?= lang('Medias.No files to display'); ?></p>
 	<?php else: ?>
 	<div class="card-deck">
 
 		<?php foreach ($files as $file): ?>
-		<div class="card mb-4" style="min-width: 10rem; max-width: 200px;">
-			<img src="<?= img_data($file->getThumbnail()) ?>" class="card-img-top img-thumbnail" alt="<?= $file->filename ?>">
-			<div class="card-header">
-				<?= view('Tatter\Files\Views\Menus\single', ['file' => $file, 'access' => $access]) ?>
-			</div>
-			<div class="card-body">
-				<h6 class="card-title"><?= bytes2human($file->size) ?></h6>
-				<p class="card-text"><?= $file->filename ?></p>
-			</div>
-			<div class="card-footer">
-				<small class="text-muted">Added <?= $file->created_at->humanize(); ?></small>
+		<div class="card mb-4 file-item" data-uuid-media="<?= $file->uuid ; ?>"> 
+			<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100">
+				<div class="attachment-preview js--select-attachment subtype-<?= $file->getExtension(); ?> <?= $file->getOrientation(); ?>">
+					<div class="thumbnail">
+						<div class="centered">
+							<div class="card-toolbar">
+								<a href="javascript:;" data-uuid-media="<?= $file->uuid ; ?>" class="btn select-image btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+									<i class="la la-pencil icon-nm"></i>
+								</a>
+								<a href="#" data-imagemanager="reload" data-uuid="<?= $file->getUuid(); ?>" class="btn btn-icon btn-circle btn-sm btn-light-danger deleteFileMedia" data-card-tool="remove">
+									<i class="la la-close icon-nm"></i>
+								</a>
+							</div>
+							<img data-uuid-media="<?= $file->uuid ; ?>" src="<?= img_data($file->getThumbnail()) ?>" class="card-img-top img-thumbnail select-image" alt="<?= $file->filename ?>">
+						</div>
+						<?php if ($file->getBTitle()) { ?>
+								<div class="nameFile"><?= $file->getBTitle(); ?></div>
+							<?php } ?>
+							<?php if ($file->getOrientation() == 'square') { ?>
+								<div class="nameFile"><?= $file->filename; ?></div>
+							<?php } ?>
+					</div>
+				</div>
 			</div>
 		</div>
 		<?php endforeach; ?>

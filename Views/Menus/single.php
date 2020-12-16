@@ -18,7 +18,7 @@ if (empty($exports) && $access === 'display')
 	
 		<?php $export = new $class(); ?>
 		<?php if ($export->ajax): ?>
-		<a class="dropdown-item" href="<?= site_url('files/export/' . $export->slug . '/' . $file->id) ?>" onclick="$('#globalModal .modal-body').load('<?= site_url('files/export/' . $export->slug . '/' . $file->id) ?>'); $('#globalModal').modal(); return false;"><?= $export->name ?></a>
+		<a class="dropdown-item" href="<?= site_url('files/export/' . $export->slug . '/' . $file->id) ?>" onclick="$('#globalModal .modal-body').load('<?= site_url(CI_AREA_ADMIN . '/medias/export/' . $export->slug . '/' . $file->id) ?>'); $('#globalModal').modal(); return false;"><?= $export->name ?></a>
 		
 		<?php else: ?>
 		<a class="dropdown-item" href="<?= site_url('files/export/' . $export->slug . '/' . $file->id) ?>"><?= $export->name ?></a>
@@ -29,9 +29,8 @@ if (empty($exports) && $access === 'display')
 
 		<?php if ($access === 'manage'): ?>
 		<div class="dropdown-divider"></div>
-		<h6 class="dropdown-header">Manage</h6>
-		<a class="dropdown-item" href="<?= site_url('files/rename/' . $file->id) ?>" onclick="$('#globalModal .modal-body').load('<?= site_url('files/rename/' . $file->id) ?>'); $('#globalModal').modal(); return false;">Rename</a>
-		<a class="dropdown-item" href="<?= site_url('files/delete/' . $file->id) ?>">Delete</a>
+		<a class="dropdown-item select-image" data-uuid-media="<?= $file->uuid ; ?>" href="<?= site_url(CI_AREA_ADMIN . '/medias/rename/' . $file->id) ?>" onclick="$('#globalModal .modal-body').load('<?= site_url(CI_AREA_ADMIN . '/medias/rename/' . $file->id) ?>'); $('#globalModal').modal(); return false;"><?= lang('Core.edit'); ?></a>
+		<a class="dropdown-item" href="<?= site_url(CI_AREA_ADMIN . '/medias/removeFile/' . $file->uuid) ?>"><?= lang('Core.delete'); ?></a>
 		<?php endif; ?>
 
 	</div>

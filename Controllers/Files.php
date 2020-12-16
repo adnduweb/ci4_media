@@ -1,15 +1,16 @@
-<?php namespace Adnduweb\Ci4Core\Controllers;
+<?php namespace Adnduweb\Ci4Media\Controllers;
 
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Adnduweb\Ci4Admin\Libraries\Theme;
 use Tatter\Exports\Exceptions\ExportsException;
-use  Adnduweb\Ci4Core\Config\Files as FilesConfig;
-use  Adnduweb\Ci4Core\Exceptions\FilesException;
-use  Adnduweb\Ci4Core\Entities\File;
-use  Adnduweb\Ci4Core\Models\FileModel;
+use  Adnduweb\Ci4Media\Config\Files as FilesConfig;
+use  Adnduweb\Ci4Media\Exceptions\FilesException;
+use  Adnduweb\Ci4Media\Entities\File;
+use  Adnduweb\Ci4Media\Models\FileModel;
 
 class Files extends Controller
 {
@@ -73,10 +74,10 @@ class Files extends Controller
 	{
 		parent::initController($request, $response, $logger);
 
-		if (! function_exists('user_id') || ! empty($this->config->failNoAuth))
-		{
-			throw new FilesException(lang('Files.noAuth'));
-		}
+		// if (! function_exists('user_id') || ! empty($this->config->failNoAuth))
+		// {
+		// 	throw new FilesException(lang('Files.noAuth'));
+		// }
 	}
 
 	//--------------------------------------------------------------------
@@ -90,6 +91,12 @@ class Files extends Controller
 	{
 		// Apply any defaults for missing metadata
 		$this->setDefaults();
+
+		// Theme::add_js(
+        //     [
+        //         '/resources/metronic/js/pages/custom/companies/outils.companies.js'
+        //     ]
+        // );
 
 		// Get the Files
 		if (! isset($this->data['files']))
@@ -124,14 +131,25 @@ class Files extends Controller
 				], true);
 			}
 		}
+		$this->data['html']    = '';
+		$this->data['theme_admin']    = 'metronic';
+		$this->data['paramJs'] =  [
+            'base_url'       => site_url(),
+			'current_url'    => current_url(),
+			'basePath'       => '\/',
+            'baseController' => base_url('/' . env('app.areaAdmin') ),
+            'segementAdmin'  => env('app.areaAdmin'),
+            'startUrl'       => '\/' . env('app.areaAdmin')
+		];
+		$this->data['menu'] =  [];
 
 		// AJAX calls skip the wrapping
 		if ($this->data['ajax'])
 		{
-			return view('Tatter\Files\Views\Formats\\' . $this->data['format'], $this->data);
+			return view('Adnduweb\Ci4Admin\Views\Formats\\' . $this->data['format'], $this->data);
 		}
 
-		return view('Tatter\Files\Views\index', $this->data);
+		return view('Adnduweb\Ci4Media\Views\index', $this->data);
 	}
 
 	//--------------------------------------------------------------------
@@ -144,11 +162,11 @@ class Files extends Controller
 	 */
 	public function index()
 	{
-		// Check for list permission
-		if (! $this->model->mayList())
-		{
-			return $this->user();
-		}
+		// // Check for list permission
+		// if (! $this->model->mayList())
+		// {
+		// 	return $this->user();
+		// }
 
 		return $this->display();
 	}
@@ -228,7 +246,7 @@ class Files extends Controller
 			return $this->failure(403, lang('Permits.notPermitted'));
 		}
 
-		return view('Tatter\Files\Views\new');
+		return view('Adnduweb\Ci4Admin\Views\new');
 	}
 
 	/**
@@ -265,7 +283,7 @@ class Files extends Controller
 
 		// AJAX skips the wrapper
 		return view(
-			$this->request->isAJAX() ? 'Tatter\Files\Views\Forms\rename' : 'Tatter\Files\Views\rename',
+			$this->request->isAJAX() ? 'Adnduweb\Ci4Admin\Views\Forms\rename' : 'Adnduweb\Ci4Admin\Views\rename',
 			[
 				'config' => $this->config,
 				'file'   => $file,
@@ -625,7 +643,8 @@ class Files extends Controller
 			'perPage'  => $this->getPerPage(),
 			'page'     => $this->request->getVar('page'),
 			'pager'    => null,
-			'access'   => $this->model->mayAdmin() ? 'manage' : 'display',
+			//'access'   => $this->model->mayAdmin() ? 'manage' : 'display',
+			'access'   => 'manage',
 			'exports'  => $this->getExports(),
 			'bulks'    => handlers()->where(['bulk' => 1])->findAll(),
 		]);

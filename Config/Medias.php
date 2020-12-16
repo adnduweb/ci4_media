@@ -1,17 +1,17 @@
 <?php 
 
-namespace Adnduweb\Ci4Core\Config;
+namespace Adnduweb\Ci4Media\Config;
 
 use CodeIgniter\Config\BaseConfig;
 
-class Files extends BaseConfig
+class Medias extends BaseConfig
 {
 	/**
 	 * Directory to store files (with trailing slash)
 	 *
 	 * @var string
 	 */
-	public $storagePath = WRITEPATH . 'files/';
+	public $storagePath = ROOTPATH . 'public/uploads/';
 
 	/**
 	 * Whether to include routes to the Files Controller.
@@ -26,8 +26,8 @@ class Files extends BaseConfig
 	 * @var array<string, string>
 	 */
 	public $layouts = [
-		'public' => 'Adnduweb\Ci4Core\Views\layout',
-		'manage' => 'Adnduweb\Ci4Core\Views\layout',
+		'public' => 'Adnduweb\Ci4Media\Views\layout',
+		'manage' => 'Adnduweb\Ci4Media\Views\layout',
 	];
 
 	/**
@@ -36,7 +36,7 @@ class Files extends BaseConfig
 	 * @var string[]
 	 */
 	public $views = [
-		'dropzone' => 'Adnduweb\Ci4Core\Views\Dropzone\config',
+		'dropzone' => 'Adnduweb\Ci4Media\Views\Dropzone\config',
 	];
 
 	/**
@@ -51,5 +51,13 @@ class Files extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $defaultThumbnail = 'Adnduweb\Ci4Core\Assets\Unavailable.jpg';
+	public $defaultThumbnail = 'Adnduweb\Ci4Media\Assets\Unavailable.jpg';
+
+	public $defaultThumbnailDoc = 'Adnduweb\Ci4Media\Assets\Document.png';
+
+	public $extensionImage =  'jpg,jpeg,png,gif,xbm,xpm,wbmp,webp,bmp';
+
+	public $extensionDoc =  ['doc','docx','xls','csv','pdf'];
+
+	public $extensionAllowed =  'jpg,jpeg,png,gif,xbm,xpm,wbmp,webp,bmp,doc,docs,xls,csv,pdf';
 }

@@ -1,39 +1,29 @@
 <?php $pager->setSurroundCount(2) ?>
 
-<nav aria-label="Page navigation">
-	<ul class="pagination">
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+<div class="d-flex flex-wrap py-2 mr-3">
 	<?php if ($pager->hasPrevious()) : ?>
-		<li class="page-item">
-			<a class="page-link" href="<?= $pager->getFirst() ?>" aria-label="First">
+			<a class="btn btn-icon btn-sm btn-light mr-2 my-1" href="<?= $pager->getFirst() ?>" aria-label="First">
 				<span aria-hidden="true">First</span>
 			</a>
-		</li>
-		<li class="page-item">
-			<a class="page-link" href="<?= $pager->getPrevious() ?>" aria-label="Previous">
+			<a class="btn btn-icon btn-sm btn-light mr-2 my-1" href="<?= $pager->getPrevious() ?>" aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
 			</a>
-		</li>
 	<?php endif ?>
 
 	<?php foreach ($pager->links() as $link) : ?>
-		<li  class="page-item <?= $link['active'] ? 'active' : '' ?>">
-			<a class="page-link" href="<?= $link['uri'] ?>">
-				<?= $link['title'] ?>
-			</a>
-		</li>
+		<a class="btn btn-icon btn-sm border-0 btn-light btn-hover-primary <?= $link['active'] ? 'active' : '' ?> mr-2 my-1" href="<?= $link['uri'] ?>">
+			<?= $link['title'] ?>
+		</a>
 	<?php endforeach ?>
 
 	<?php if ($pager->hasNext()) : ?>
-		<li class="page-item">
-			<a class="page-link" href="<?= $pager->getNext() ?>" aria-label="Previous">
-				<span aria-hidden="true">&raquo;</span>
-			</a>
-		</li>
-		<li class="page-item">
-			<a class="page-link" href="<?= $pager->getLast() ?>" aria-label="Last">
-				<span aria-hidden="true">Last</span>
-			</a>
-		</li>
+		<a class="btn btn-icon btn-sm btn-light mr-2 my-1" href="<?= $pager->getNext() ?>" aria-label="Previous">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+		<a class="btn btn-icon btn-sm btn-light mr-2 my-1" href="<?= $pager->getLast() ?>" aria-label="Last">
+			<span aria-hidden="true">Last</span>
+		</a>
 	<?php endif ?>
-	</ul>
-</nav>
+	</div>
+</div>

@@ -18,7 +18,7 @@ if (empty($bulks) && $access === 'display')
 		<?php $export = new $class(); ?>
 
 		<?php if ($export->ajax): ?>
-		<input name="<?= $export->slug ?>" type="submit" class="dropdown-item" value="<?= $export->name ?>" onclick="$('#globalModal .modal-body').load('<?= site_url('files/bulk/' . $export->slug) ?>'); $('#globalModal').modal(); return false;">
+		<input name="<?= $export->slug ?>" type="submit" class="dropdown-item" value="<?= $export->name ?>" onclick="$('#globalModal .modal-body').load('<?= site_url(CI_AREA_ADMIN . '/medias/bulk/' . $export->slug) ?>'); $('#globalModal').modal(); return false;">
 		<?php else: ?>
 		<input name="<?= $export->slug ?>" type="submit" class="dropdown-item" value="<?= $export->name ?>">
 		<?php endif; ?>

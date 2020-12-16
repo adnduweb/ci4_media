@@ -1,21 +1,29 @@
 <?php
 
-if (empty(config('Files')->routeFiles))
+if (empty(config('Medias')->routeFiles))
 {
 	return;
 }
-
+ 
 // Routes to Files controller
-$routes->group('files', ['namespace' => '\Adnduweb\Ci4Core\Controllers'], function ($routes)
+$routes->group(CI_AREA_ADMIN . '/medias', ['namespace' => '\Adnduweb\Ci4Media\Controllers\Admin' , 'filter' => 'login'], function ($routes)
 {
-	$routes->get('/', 'Files::index');
-	$routes->get('user', 'Files::user');
-	$routes->get('user/(:any)', 'Files::user/$1');
-	$routes->get('delete/(:num)',    'Files::delete/$1');
-	$routes->get('thumbnail/(:num)', 'Files::thumbnail/$1');
+	$routes->get('/', 'Medias::index');
+	$routes->get('user', 'Medias::user');
+	$routes->get('user/(:any)', 'Medias::user/$1');
+	$routes->get('remove/(:num)',    'Medias::remove/$1');
+	$routes->get('removeAll/(:num)',    'Medias::removeAll/$1');
+	
+	$routes->get('thumbnail/(:num)', 'Medias::thumbnail/$1');
+	$routes->get('rename/(:num)', 'Medias::rename/$1');
 
-	$routes->post('upload', 'Files::upload');
-	$routes->add('export/(:any)', 'Files::export/$1');
+	$routes->post('upload', 'Medias::upload');
+	$routes->add('export/(:any)', 'Medias::export/$1');
 
-	$routes->add('(:any)', 'Files::$1');
+	$routes->add('(:any)', 'Medias::$1');
+	$routes->add('getManagerEdition', 'Medias::getManagerEdition');
+
+	$routes->get('removedfile/(:any)', 'Medias::removeFile/$1');
+	$routes->post('saveManagerEdition', 'Medias::saveManagerEdition');
+
 });

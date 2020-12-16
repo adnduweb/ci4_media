@@ -1,6 +1,6 @@
 <?php 
 
-namespace Adnduweb\Ci4Core\Config;
+namespace Adnduweb\Ci4Media\Config;
 
 /**
  * Class Registrar
@@ -19,7 +19,7 @@ class Registrar
 	{
 		return [
 			'templates' => [
-				'files_bootstrap' => 'Adnduweb\Ci4Core\Views\pager',
+				'files_bootstrap' => 'Adnduweb\Ci4Media\Views\pager',
 			],
 		];
 	}

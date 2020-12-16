@@ -1,4 +1,4 @@
-<?php namespace Adnduweb\Ci4Core\Structures;
+<?php namespace Adnduweb\Ci4Media\Structures;
 
 use CodeIgniter\Files\Exceptions\FileNotFoundException;
 use CodeIgniter\Files\File;
@@ -10,7 +10,7 @@ use CodeIgniter\Files\File;
  * (which extends SplFileInfo) to allow entity
  * filenames to supercede disk names.
  */
-class FileObject extends File
+class MediaObject extends File
 {
 	/**
 	 * Base file name to override disk version
