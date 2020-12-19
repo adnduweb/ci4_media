@@ -2,11 +2,11 @@
 	<?php if (empty($files)): ?>
 	<p><?= lang('Medias.No files to display'); ?></p>
 	<?php else: ?>
-	<div class="card-deck">
+	<div class="card-deck d-flex">
 
 		<?php foreach ($files as $file): ?>
-		<div class="card mb-4 file-item" data-uuid-media="<?= $file->uuid ; ?>"> 
-			<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100">
+		<div class="cardImage mb-4 file-item" data-uuid-media="<?= $file->uuid ; ?>"> 
+			<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100 w-180px h-150px mr-5 mb-1 mb-md-0 bg-primary-o-10">
 				<div class="attachment-preview js--select-attachment subtype-<?= $file->getExtension(); ?> <?= $file->getOrientation(); ?>">
 					<div class="thumbnail">
 						<div class="centered">

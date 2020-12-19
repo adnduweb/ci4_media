@@ -26,8 +26,8 @@ class Medias extends BaseConfig
 	 * @var array<string, string>
 	 */
 	public $layouts = [
-		'public' => 'Adnduweb\Ci4Media\Views\layout',
-		'manage' => 'Adnduweb\Ci4Media\Views\layout',
+		'public' => 'Adnduweb\Ci4Media\Views\themes\metronic\layout',
+		'manage' => 'Adnduweb\Ci4Media\Views\themes\metronic\layout',
 	];
 
 	/**
@@ -36,7 +36,7 @@ class Medias extends BaseConfig
 	 * @var string[]
 	 */
 	public $views = [
-		'dropzone' => 'Adnduweb\Ci4Media\Views\Dropzone\config',
+		'dropzone' => 'Adnduweb\Ci4Media\Views\themes\metronic\Dropzone\config',
 	];
 
 	/**

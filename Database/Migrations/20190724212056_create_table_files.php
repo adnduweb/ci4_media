@@ -48,31 +48,33 @@ class Migration_create_table_medias extends Migration
 
 		// medias_users
 		$fields = [
-			'file_id'    => ['type' => 'INT', 'unsigned' => true],
-			'user_id'    => ['type' => 'INT', 'unsigned' => true],
+			'media_id'   => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'user_id'    => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
 			'created_at' => ['type' => 'DATETIME', 'null' => true],
 		];
 
 		$this->forge->addField('id');
 		$this->forge->addField($fields);
 
-		$this->forge->addUniqueKey(['file_id', 'user_id']);
-		$this->forge->addUniqueKey(['user_id', 'file_id']);
+		$this->forge->addUniqueKey(['media_id', 'user_id']);
+		$this->forge->addUniqueKey(['user_id', 'media_id']);
+		// $this->forge->addForeignKey('media_id', 'medias', 'id', false, 'CASCADE');
+		// $this->forge->addForeignKey('user_id', 'users', 'id', false, 'CASCADE');
 
 		$this->forge->createTable('medias_users');
 
 		// downloads
 		$fields = [
-			'file_id'    => ['type' => 'INT', 'unsigned' => true],
-			'user_id'    => ['type' => 'INT', 'unsigned' => true],
+			'media_id'    => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'user_id'    => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
 			'created_at' => ['type' => 'DATETIME', 'null' => true],
 		];
 
 		$this->forge->addField('id');
 		$this->forge->addField($fields);
 
-		$this->forge->addKey(['file_id', 'user_id']);
-		$this->forge->addKey(['user_id', 'file_id']);
+		$this->forge->addKey(['media_id', 'user_id']);
+		$this->forge->addKey(['user_id', 'media_id']);
 
 		$this->forge->createTable('medias_downloads');
 	}

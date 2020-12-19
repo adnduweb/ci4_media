@@ -25,7 +25,7 @@ use \Adnduweb\Ci4Admin\Libraries\Theme; ?>
 
 						<h1><?= lang('Medias.manage_of_files'); ?></h1>
 
-						<?= view('Adnduweb\Ci4Media\Views\Dropzone\zone') ?>
+						<?= view('Adnduweb\Ci4Media\Views\themes\metronic\Dropzone\zone') ?>
 
 
 						<!-- <form class="form-inline mb-3" name="files-search" method="get" action="<?= current_url() ?>">
@@ -52,7 +52,7 @@ use \Adnduweb\Ci4Admin\Libraries\Theme; ?>
 
 							
 							<div id="imageManager">
-								<?= view('Adnduweb\Ci4Media\Views\Forms\files') ?>
+								<?= view('Adnduweb\Ci4Media\Views\themes\metronic\Forms\files') ?>
 							</div>
 							
 							<?php endif; ?>
@@ -63,7 +63,7 @@ use \Adnduweb\Ci4Admin\Libraries\Theme; ?>
 		</div>
 	</div>
 
-	<?= view('Adnduweb\Ci4Media\Views\Dropzone\modal') ?>
+	<?= view('Adnduweb\Ci4Media\Views\themes\metronic\Dropzone\modal') ?>
 
 	<!-- begin::Outils de gestion de média -->
 	<div id="imageManager_edition" class="imageManager_edition"></div>

@@ -9,7 +9,7 @@ use Adnduweb\Ci4Core\Exceptions\ThumbnailsException;
 
 class MediaModel extends UuidModel
 {
-	use \Tatter\Relations\Traits\ModelTrait, \Adnduweb\Ci4Core\Traits\AuditsTrait; 
+	use \Tatter\Relations\Traits\ModelTrait, \Adnduweb\Ci4Core\Traits\AuditsTrait, \Adnduweb\Ci4Core\Models\BaseModel;
 	//use \Tatter\Permits\Traits\PermitsTrait;
 
 	protected $table        = 'medias';
@@ -18,11 +18,12 @@ class MediaModel extends UuidModel
 	protected $tableLang    = 'medias_langs';
 	protected $with         = ['medias_langs'];
 	protected $uuidFields   = ['uuid'];
-	protected $localizeFile = 'App\Models\UserModel';
 
 	protected $useTimestamps  = true;
 	protected $useSoftDeletes = false;
 	protected $skipValidation = false; 
+
+	protected $searchTable = ['medias', 'medias_langs'];
 
 	protected $allowedFields = [
 		'uuid',
@@ -49,10 +50,20 @@ class MediaModel extends UuidModel
 	// Permits
 	protected $mode       = 04660;
 	protected $userKey    = 'user_id';
-	protected $pivotKey   = 'file_id';
+	protected $pivotKey   = 'media_id';
 	protected $usersPivot = 'medias_users';
 
 	//--------------------------------------------------------------------
+
+	public function __construct()
+    {
+        parent::__construct();
+		$this->builder           = $this->db->table('medias');
+		$this->builder_langs     = $this->db->table('medias_langs');
+		$this->builder_downloads = $this->db->table('medias_downloads');
+		$this->builder_users     = $this->db->table('medias_users');
+
+    }
 
 	/**
 	 * Normalizes and creates (if necessary) the storage and thumbnail paths.
@@ -129,7 +140,7 @@ class MediaModel extends UuidModel
 	public function addToUser(int $mediaId, int $userId): bool
 	{
 		return (bool) $this->db->table('medias_users')->insert([
-			'file_id' => $mediaId,
+			'media_id' => $mediaId,
 			'user_id' => $userId,
 		]);
 	}
@@ -173,7 +184,7 @@ class MediaModel extends UuidModel
 	public function whereUser(int $userId): self
 	{
 		$this->select('files.*')
-			->join('medias_users', 'medias_users.file_id = files.id', 'left')
+			->join('medias_users', 'medias_users.media_id = files.id', 'left')
 			->where('user_id', $userId);
 
 		return $this;
@@ -288,6 +299,58 @@ class MediaModel extends UuidModel
 
 		// Return the File entity
 		return $this->find($mediaId);
+	}
+
+	public function search(string $search){
+
+		$result = [];
+
+		//MEDIAS
+		$fieldsMedias = $this->db->getFieldNames('medias');
+
+		$i = 0;
+		$tempArray = [];
+		foreach ($fieldsMedias as $field)
+		{
+			$tempArray[$field] = $search;
+			$i++;
+		}
+		
+		$this->builder->orLike($tempArray);  
+		$res = $this->builder->get()->getResultArray();
+
+		$item = [];
+		if(!empty($res)){
+			foreach ($res as $s){
+				$item[] = new $this->returnType($s);
+			}
+		}
+
+		//MEDIAS LANGS
+		$fieldsMediaslangs = $this->db->getFieldNames('medias_langs');
+
+		$i = 0;
+		$tempArray = [];
+		foreach ($fieldsMediaslangs as $field)
+		{
+			$tempArray[$field] = $search;
+			$i++;
+		}
+		
+		$this->builder_langs->orLike($tempArray);  
+		$res = $this->builder_langs->get()->getResult();
+
+		$item1 = [];
+		if(!empty($res)){
+			foreach ($res as $s){
+				$item1[] = new $this->returnType($this->builder->where('id', $s->media_id)->get()->getRowArray());
+			}
+		}
+
+		$result = array_merge($item, $item1);
+
+		return $result;
+
 	}
 
 

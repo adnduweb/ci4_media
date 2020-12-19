@@ -86,7 +86,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 		parent::initController($request, $response, $logger);
 
 		if (!function_exists('user_id') || !empty($this->config->failNoAuth)) {
-			throw new MediasException(lang('Files.noAuth'));
+			throw new MediasException(lang('Medias.noAuth'));
 		}
 	}
 
@@ -163,10 +163,11 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 		// AJAX calls skip the wrapping
 		if ($this->viewData['ajax']) {
-			return view('Adnduweb\Ci4Media\Views\Formats\\' . $this->viewData['format'], $this->viewData);
+			// return view('Adnduweb\Ci4Media\Views\Formats\\' . $this->viewData['format'], $this->viewData);
+			return $this->_render('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\Formats\\' . $this->viewData['format'], $this->viewData);
 		}
 
-		return view('Adnduweb\Ci4Media\Views\index', $this->viewData);
+		return $this->_render('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\index', $this->viewData);
 	}
 
 	//--------------------------------------------------------------------
@@ -257,7 +258,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 			return $this->failure(403, lang('Permits.notPermitted'));
 		}
 
-		return view('Adnduweb\Ci4Admin\Views\new');
+		return view('Adnduweb\Ci4Admin\themes\/'. $this->settings->setting_theme_admin.'/\new');
 	}
 
 	/**
@@ -275,7 +276,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 		// Handle missing info
 		if (empty($file)) {
-			return $this->failure(400, lang('Files.noFile'));
+			return $this->failure(400, lang('Medias.noFile'));
 		}
 
 		// Check for form submission
@@ -287,12 +288,12 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 			// AJAX requests are blank on success
 			return $this->request->isAJAX()
 				? ''
-				: redirect()->back()->with('message', lang('Files.renameSuccess', [$filename]));
+				: redirect()->back()->with('message', lang('Medias.renameSuccess', [$filename]));
 		}
 
 		// AJAX skips the wrapper
 		return view(
-			$this->request->isAJAX() ? 'Adnduweb\Ci4Media\Views\Forms\rename' : 'Adnduweb\Ci4Media\Views\rename',
+			$this->request->isAJAX() ? 'Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\Forms\rename' : 'Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\rename',
 			[
 				'config' => $this->config,
 				'file'   => $file,
@@ -328,8 +329,9 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 
 		if (empty($media)) {
-			$response = ['error' => ['code' => 400, 'message' => lang('Medias.noFile')], 'success' => false, csrf_token() => csrf_hash()];
-			return $this->respond($response, 400);
+			// $response = ['error' => ['code' => 400, 'message' => lang('Medias.noFile')], 'success' => false, csrf_token() => csrf_hash()];
+			// return $this->respond($response, 400);
+			return;
 		}
 
 		if ($this->model->delete($media->id)) {
@@ -345,10 +347,10 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 			if (!empty($customFiles)) {
 				@unlink(config('Medias')->storagePath . 'custom/' . $media->localname);
-			}
+			} 
 
 			if ($this->request->isAJAX()) {
-				$html = view('Adnduweb\Ci4Media\Views\Forms\files', $this->dataImageManager());
+				$html = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\Forms\files', $this->dataImageManager());
 				$response = ['success' => ['code' => 200, 'message' => lang('Medias.deleteSuccess')], 'error' => false, 'html' => $html, csrf_token() => csrf_hash()];
 				return $this->respond($response,  200);
 			}
@@ -397,7 +399,8 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 				}
 			}
 
-			rrmdir(WRITEPATH . 'uploads/');
+			//rrmdir(WRITEPATH . 'uploads');
+			delete_directory(WRITEPATH . 'uploads');
 		}
 
 		// Recreate the uploads folder
@@ -439,7 +442,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 		// Make sure some files where checked
 		if (empty($fileIds)) {
-			return $this->failure(400, lang('Files.noFile'));
+			return $this->failure(400, lang('Medias.noFile'));
 		}
 
 		// Handle actions
@@ -491,8 +494,19 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 		// Verify upload succeeded
 		$upload = $this->request->getFile('file');
+
+		$this->rules = [
+			'file' => 'uploaded[file]|mime_in[file,image/jpg,image/jpeg,image/gif,image/png,text/plain,text/csv,application/vnd.ms-excel,application/pdf,application/msword,application/msword]'
+        ];
+
+		// In the controller
+		if (!$this->validate($this->rules)) {
+			$response = ['error' => ['code' => 400, 'message' => lang('Medias.noFileAuthorized')], 'success' => false, csrf_token() => csrf_hash()];
+			return $this->respond($response, 400);
+        }
+
 		if (empty($upload)) {
-			return $this->failure(400, lang('Files.noFile'));
+			return $this->failure(400, lang('Medias.noFile'));
 		}
 		if (!$upload->isValid()) {
 			return $upload->getErrorString() . '(' . $upload->getError() . ')';
@@ -541,7 +555,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 		if ($this->request->isAJAX()) {
 
-			$html = view('Adnduweb\Ci4Media\Views\Forms\files', $this->dataImageManager());
+			$html = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\Forms\files', $this->dataImageManager());
 			$response = ['success' => ['code' => 200, 'message' => lang('Medias.deleteSuccess')], 'error' => false, 'html' => $html, csrf_token() => csrf_hash()];
 			return $this->respond($response,  200);
 
@@ -619,7 +633,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 		// Load the file
 		$file = $this->model->find($fileId);
 		if (empty($file)) {
-			alert('warning', lang('Files.noFile'));
+			alert('warning', lang('Medias.noFile'));
 			return redirect()->back();
 		}
 
@@ -858,7 +872,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 			$this->viewData['media'] = $this->tableModel->where([$this->tableModel->uuidFields[0] => $this->uuid])->first();
 			$this->infosCustomImage($this->viewData['media']);
 
-			$html = view('Adnduweb\Ci4Media\Views\imageManagerEdition', $this->viewData);
+			$html = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\imageManagerEdition', $this->viewData);
 			return $this->respond(['status' => true, 'type' => 'success', 'html' => $html], 200);
 		}
 	}
@@ -947,7 +961,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 		$this->viewData['only'] = (isset($value['only'])) ? $value['only'] : false;
 		$this->viewData['input'] = '';
 
-		$html = view('Adnduweb\Ci4Media\Views\cropImage', $this->viewData);
+		$html = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\cropImage', $this->viewData);
 		//return $this->respond(['status' => true, 'type' => 'success', 'path' => site_url('public/uploads/' . $newName)], 200);
 		$return = [
 			'status' => true,
@@ -988,7 +1002,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 			$mediaCustomEdition = [];
 			if ($this->request->getPost('imageCustomEdition') == true) {
 				$this->infosCustomImage($this->viewData['media']);
-				$mediaCustomEdition = view('Adnduweb\Ci4Media\Views\imageCustom', $this->viewData);
+				$mediaCustomEdition = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\imageCustom', $this->viewData);
 			}
 
 			$response =
@@ -1059,7 +1073,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 			}
 
 			$this->infosCustomImage($this->viewData['media']);
-			$mediaCustomEdition = view('Adnduweb\Ci4Media\Views\imageCustom', $this->viewData);
+			$mediaCustomEdition = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\imageCustom', $this->viewData);
 
 			$response = ['success' => ['code' => 200, 'message' => lang('Medias.delete_file_success')], 'error' => false, 'customImage' => $mediaCustomEdition, csrf_token() => csrf_hash()];
 			return $this->respond($response,  200);
@@ -1067,7 +1081,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 	public function getDisplayImageManager()
 	{
-		$html = view('Adnduweb\Ci4Media\Views\Forms\files', $this->dataImageManager());
+		$html = view('Adnduweb\Ci4Media\themes\/'. $this->settings->setting_theme_admin.'/\Forms\files', $this->dataImageManager());
 		$response = ['success' => ['code' => 200, 'message' => lang('Medias.deleteSuccess')], 'error' => false, 'html' => $html, csrf_token() => csrf_hash()];
 		return $this->respond($response,  200);
 	}

@@ -19,7 +19,7 @@ class Registrar
 	{
 		return [
 			'templates' => [
-				'files_bootstrap' => 'Adnduweb\Ci4Media\Views\pager',
+				'files_bootstrap' => 'Adnduweb\Ci4Media\Views\themes\metronic\pager',
 			],
 		];
 	}

@@ -23,7 +23,7 @@
 				<td class="align-middle"><?= bytes2human($file->size) ?></td>
 				<td class="align-middle"><?= $file->created_at->humanize(); ?></td>
 				<td class="align-middle">
-					<?= view('Adnduweb\Ci4Media\Views\Menus\single', ['file' => $file, 'access' => $access]) ?>
+					<?= view('Adnduweb\Ci4Media\Views\themes\metronic\Menus\single', ['file' => $file, 'access' => $access]) ?>
 				</td>
 			</tr>
 			<?php endforeach; ?>

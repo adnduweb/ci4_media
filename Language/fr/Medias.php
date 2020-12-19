@@ -29,5 +29,6 @@ return [
 	'No files to display'                => "Aucun fichier à afficher",
 	'Drop files here or click to upload' => "Déposez les fichiers ici ou cliquez pour télécharger",
 	'Drop files here or click to upload' => "Déposez les fichiers ici ou cliquez pour télécharger",
+	'title_search'                       => 'Les médias',
 
 ];

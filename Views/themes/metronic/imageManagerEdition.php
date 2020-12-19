@@ -74,7 +74,7 @@
                             </div>
                             <hr>
                             <div id="imageCustom">
-                                <?= $this->include('Adnduweb\Ci4Media\Views\imageCustom') ?>
+                                <?= $this->include('Adnduweb\Ci4Media\Views\themes\metronic\imageCustom') ?>
                             </div>
                         </div>
                     </div> <?= form_close(); ?>
