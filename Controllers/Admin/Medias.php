@@ -37,7 +37,7 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 	/**
 	 * Helpers to load.
 	 */
-	protected $helpers = ['auth', 'detect', 'alerts', 'medias', 'handlers', 'html', 'text', 'form'];
+	protected $helpers = ['auth', 'admin', 'detect', 'alerts', 'medias', 'handlers', 'html', 'text', 'form'];
 
 	// /**
 	//  * Overriding data for views.
@@ -329,8 +329,8 @@ class Medias extends \Adnduweb\Ci4Admin\Controllers\BaseAdminController
 
 
 		if (empty($media)) {
-			// $response = ['error' => ['code' => 400, 'message' => lang('Medias.noFile')], 'success' => false, csrf_token() => csrf_hash()];
-			// return $this->respond($response, 400);
+			$response = [csrf_token() => csrf_hash()];
+			return $this->respond($response, 200);
 			return;
 		}
 

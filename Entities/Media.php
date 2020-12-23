@@ -323,4 +323,21 @@ class Media extends UuidEntity
 
 		return realpath($path) ?: $path;
 	}
+
+		/**
+	 * Returns the path to this file's thumbnail, or the default from config.
+	 * Should always return a path to a valid file to be safe for img_data()
+	 *
+	 * @return string
+	 */
+	public function getMedium(): string
+	{
+		$path = config('Medias')->storagePath . 'medium' . DIRECTORY_SEPARATOR . ($this->attributes['thumbnail'] ?? '');
+
+		if (!is_file($path)) {
+			$path = self::locateDefaultThumbnail();
+		}
+
+		return realpath($path) ?: $path;
+	}
 }

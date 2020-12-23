@@ -15,9 +15,9 @@
                         <?php if (!empty($media)) { ?>
                             <?php $file = new \CodeIgniter\Files\File($media->getPath('original')); ?>
                             <?php list($width, $height, $type, $attr) = getimagesize($media->getPath('original')); ?>
-                            <div data-type="<?= $media->getType(); ?>" data-media-thumbnail="<?= img_data($media->getOriginal()) ?>" id="attachment-media-view_<?= $media->getIdMedia(); ?>" class="attachment-media-view <?= $media->getType(); ?> landscape attachment-media-view<?= $media->getIdMedia(); ?>" data-uuid-media="<?= $media->getUuid(); ?>">
+                            <div data-type="<?= $media->getType(); ?>" data-media-thumbnail="<?= img_data($media->getMedium()) ?>" id="attachment-media-view_<?= $media->getIdMedia(); ?>" class="attachment-media-view <?= $media->getType(); ?> landscape attachment-media-view<?= $media->getIdMedia(); ?>" data-uuid-media="<?= $media->getUuid(); ?>">
                                 <div class="thumbnail thumbnail-image" id="thumbnail-image<?= $media->getIdMedia(); ?>">
-                                    <img class="details-image" src="<?= img_data($media->getOriginal()) ?>" />
+                                    <img class="details-image" src="<?= img_data($media->getMedium()) ?>" />
 
                                 </div>
                             </div>
