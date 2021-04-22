@@ -1,5 +1,5 @@
 {
-    "name": "adnduweb/ci4_media",
+    "name": "adnduweb/ci4-media",
     "license": "MIT",
     "description": "An Example of CodeIgniter 4 Media module",
     "autoload": {
@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=7.2",
-        "adnduweb/ci4_core": "*",
+        "adnduweb/ci4-core": "*",
         "components/jquery": "^3.3",
         "enyo/dropzone": "^5.7",
         "fortawesome/font-awesome": "^5.8",
